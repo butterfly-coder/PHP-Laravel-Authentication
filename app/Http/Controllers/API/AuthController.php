@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Favorite;
 use JWTAuth;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\RegistrationFormRequest;
@@ -65,10 +66,7 @@ class AuthController extends Controller
             $user->favorite_id = 1;
             $user->save();
 
-            return response()->json([
-                'success'   => true,
-                'user'      => $user,
-            ]);
+            return $this->login($request);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,
@@ -97,9 +95,11 @@ class AuthController extends Controller
     public function getUserInfo(){
         try {
             $user = auth()->user();
+            $favourite_list = Favorite::all();
             return response() -> json([
                'success'    => true,
-               'user'       => $user
+               'user'       => $user,
+               'favorite_list' => $favourite_list,
             ]);
         } catch (Exception $e) {
             return response()->json([
