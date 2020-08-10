@@ -4,6 +4,7 @@
     </IfModule>
 
     RewriteEngine On
+    RewriteBase /favorite/
 
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .

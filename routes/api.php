@@ -17,3 +17,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+Route::post('login', 'API\AuthController@login');
+Route::post('register', 'API\AuthController@register');
+Route::group(['middleware' => 'jwt.verify'], function () {
+    Route::post('setFavorite', 'API\AuthController@setFavorite');
+    Route::resource('favorite', 'API\FavoriteController');
+    Route::get('getUserInfo', 'API\AuthController@getUserInfo');
+});
