@@ -20,7 +20,13 @@ class AuthController extends Controller
         try {
             $input = $request->only('email', 'password');
             $token = null;
-
+            $user = User::where(['email' => $request->email, 'is_active' => config('global.users.active')])->first();
+            if( !$user) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Your account was deleted',
+                ], 401);
+            }
             if (!$token = JWTAuth::attempt($input)) {
                 return response()->json([
                     'success' => false,
@@ -105,6 +111,21 @@ class AuthController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'Sorry, cannot get user info'
+            ], 500);
+        }
+    }
+
+    public function deleteAccount(Request $request) {
+        try {
+            $user = auth()->user();
+            $user->update(['is_active'=>config('global.users.deactive')]);
+            return response() -> json([
+                'success'    => true,
+            ]);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Sorry, cannot delete user'
             ], 500);
         }
     }

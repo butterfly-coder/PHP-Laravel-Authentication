@@ -24,4 +24,5 @@ Route::group(['middleware' => 'jwt.verify'], function () {
     Route::post('setFavorite', 'API\AuthController@setFavorite');
     Route::resource('favorite', 'API\FavoriteController');
     Route::get('getUserInfo', 'API\AuthController@getUserInfo');
+    Route::post('deleteAccount', 'API\AuthController@deleteAccount');
 });
